@@ -1,0 +1,80 @@
+type User @entity {
+    # user address
+    id: ID!
+    collateralAmount: BigDecimal!
+    collateralAmountUSD: BigDecimal!
+    # placed one trade
+    isTrade: Boolean!
+    # placed an order with the value of more than $2000 and matched
+    matchedOrderTarget1: Boolean!
+    # placed an order with the value of more than $5000 and matched
+    matchedOrderTarget2: Boolean!
+    # placed an order with the value of more than $10000 and matched
+    matchedOrderTarget3: Boolean!
+
+    # provide liquidity to any pool for more than $500 for more than 7 days
+    liquidityTarget1Triggered: Boolean!
+    ageTarget1: BigInt!
+    updatedAtTarget1: BigInt!
+    # provide $2000 worth of liquidity to any liquidity pool in a single transaction for more than 14 days
+    liquidityTarget2Triggered: Boolean!
+    ageTarget2: BigInt!
+    updatedAtTarget2: BigInt!
+    # provide $5000 worth of liquidity to any liquidity pool in a single transaction for more than 14 days
+    liquidityTarget3Triggered: Boolean!
+    ageTarget3: BigInt!
+    updatedAtTarget3: BigInt!
+}
+
+type LiquidityPool @entity {
+    # liquidityPool address
+    id: ID!
+    collateralAddress: String!
+    perpetuals: [Perpetual!]! @derivedFrom(field:"liquidityPool")
+    createdAtTimestamp: BigInt!
+    createdAtBlockNumber: BigInt!
+}
+
+type Perpetual @entity {
+    # liquidity pool address + '-' +perpetual index
+    id: ID!
+    index: BigInt!
+    collateralAddress: String!
+    liquidityPool: LiquidityPool!
+    createdAtTimestamp: BigInt!
+    createdAtBlockNumber: BigInt!
+}
+
+type Trade @entity {
+    # trasaction hash + "-" + index + "-" + close/open
+    id: ID!
+    perpetual: Perpetual!
+    trader: User!
+    amount: BigDecimal!
+    price: BigDecimal!
+    volume: BigDecimal!
+    volumeUSD: BigDecimal!
+    fee: BigDecimal!
+    transactionHash: String!
+    blockNumber: BigInt!
+    timestamp: BigInt!
+    logIndex: BigInt!
+}
+
+type MatchOrder @entity {
+    # transaction hash + "-" + index
+    id: ID!
+    perpetual: Perpetual!
+    orderHash: String!
+    trader: User!
+    amount: BigDecimal!
+    price: BigDecimal!
+    volume: BigDecimal!
+    volumeUSD: BigDecimal!
+    type: Int!
+    gas: BigDecimal!
+    transactionHash: String!
+    blockNumber: BigInt!
+    timestamp: BigInt!
+    logIndex: BigInt!
+}

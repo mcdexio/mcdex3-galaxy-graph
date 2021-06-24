@@ -1,0 +1,76 @@
+specVersion: 0.0.2
+description: mai3-perpetual-graph
+repository: https://github.com/mcdexio/mai3-perpetual-graph
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: Factory
+    network: {{network}}
+    source:
+      address: '{{factory_address}}'
+      abi: Factory
+      startBlock: {{start_block}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - LiquidityPool
+      abis:
+        - name: Factory
+          file: ./abis/Factory.json
+      eventHandlers:
+        - event: CreateLiquidityPool(bytes32,indexed address,indexed address,indexed address,address,address,uint256,bytes)
+          handler: handleCreateLiquidityPool
+      file: ./src/factory.ts
+  - kind: ethereum/contract
+    name: Broker
+    network: {{network}}
+    source:
+      address: '{{broker_address}}' #broker contract address
+      abi: Broker
+      startBlock: {{start_block}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - MatchOrder
+      abis:
+        - name: Broker
+          file: ./abis/Broker.json
+      eventHandlers:
+        - event: TradeSuccess(bytes32,(address,address,address,address,address,int256,int256,int256,int256,uint256,uint64,uint32,uint32,uint32,uint32),int256,uint256)
+          handler: handleTradeSuccess
+      file: ./src/broker.ts
+templates:
+  - kind: ethereum/contract
+    name: LiquidityPool
+    network: {{network}}
+    source:
+      abi: LiquidityPool
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - User
+        - Perpetual
+        - Trade
+      abis:
+        - name: LiquidityPool
+          file: ./abis/LiquidityPool.json
+        - name: Oracle
+          file: ./abis/Oracle.json
+      eventHandlers:
+        - event: CreatePerpetual(uint256,address,address,address,address,address,int256[9],int256[8])
+          handler: handleCreatePerpetual
+        - event: AddLiquidity(indexed address,int256,int256,int256)
+          handler: handleAddLiquidity
+        - event: RemoveLiquidity(indexed address,int256,int256,int256)
+          handler: handleRemoveLiquidity
+        - event: Trade(uint256,indexed address,int256,int256,int256,int256)
+          handler: handleTrade
+      file: ./src/liquidityPool.ts
+
