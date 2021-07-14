@@ -83,7 +83,7 @@ export function AbsBigDecimal(x: BigDecimal): BigDecimal {
 }
 
 function getPriceFromOracle(token: string): BigDecimal {
-  let oracle = OracleMap.get(token)
+  let oracle = OracleMap.get(token) as string
   if (oracle == null) {
     return ZERO_BD
   }

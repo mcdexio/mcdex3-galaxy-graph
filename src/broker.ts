@@ -38,7 +38,8 @@ export function handleTradeSuccess(event: TradeSuccessEvent): void {
     order.blockNumber = event.block.number
     order.timestamp = event.block.timestamp
     order.logIndex = event.logIndex
-    let price = convertToDecimal(event.parrams.order.limitPrice, BI_18)
+
+    let price = convertToDecimal(event.params.order.limitPrice, BI_18)
     order.price = price
     let volume = AbsBigDecimal(order.amount).times(price)
     order.volume = volume

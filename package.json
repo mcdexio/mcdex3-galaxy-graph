@@ -4,11 +4,13 @@
   "scripts": {
     "prepare:mainnet": "mustache config/mainnet.json subgraph.template.yaml > subgraph.yaml; mustache config/mainnet.json const.template.ts > src/const.ts",
     "prepare:arb": "mustache config/arb.json subgraph.template.yaml > subgraph.yaml; mustache config/arb.json const.template.ts > src/const.ts",
+    "prepare:arb1": "mustache config/arb1.json subgraph.template.yaml > subgraph.yaml; mustache config/arb1.json const.template.ts > src/const.ts",
     "create": "graph create mcdexio/mcdex3-galaxy-graph --node https://api.thegraph.com/deploy/",
     "create-arb": "graph create mcdexio/mcdex3-galaxy-graph --node http://47.254.123.161:8020",
     "codegen": "graph codegen",
     "build": "graph build",
     "deploy": "graph deploy mcdexio/mcdex3-galaxy-graph --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
+    "deploy-arb1": "graph deploy mcdexio/galaxy --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
     "deploy-arb": "graph deploy mcdexio/mcdex3-galaxy-graph --ipfs http://47.251.38.29:5001 --node http://47.254.123.161:8020"
   },
   "devDependencies": {
