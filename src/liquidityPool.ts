@@ -42,8 +42,8 @@ export function handleAddLiquidity(event: AddLiquidityEvent): void {
     if (user.liquidity >= BigDecimal.fromString('5000')) {
         if (user.liquidityLastAddTime > ZERO_BI) {
             user.liquidityAge += (event.block.timestamp - user.liquidityLastAddTime)
-            user.liquidityLastAddTime = event.block.timestamp
         }
+        user.liquidityLastAddTime = event.block.timestamp
     }
 
     user.save()
