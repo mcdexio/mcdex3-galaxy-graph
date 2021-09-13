@@ -1,6 +1,6 @@
 specVersion: 0.0.2
-description: mai3-perpetual-graph
-repository: https://github.com/mcdexio/mai3-perpetual-graph
+description: mcdex3-galaxy-graph
+repository: https://github.com/mcdexio/mcdex-galaxy-graph
 schema:
   file: ./schema.graphql
 dataSources:
@@ -24,26 +24,6 @@ dataSources:
         - event: CreateLiquidityPool(bytes32,indexed address,indexed address,indexed address,address,address,uint256,bytes)
           handler: handleCreateLiquidityPool
       file: ./src/factory.ts
-  - kind: ethereum/contract
-    name: Broker
-    network: {{network}}
-    source:
-      address: '{{broker_address}}' #broker contract address
-      abi: Broker
-      startBlock: {{start_block}}
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.4
-      language: wasm/assemblyscript
-      entities:
-        - MatchOrder
-      abis:
-        - name: Broker
-          file: ./abis/Broker.json
-      eventHandlers:
-        - event: TradeSuccess(bytes32,(address,address,address,address,address,int256,int256,int256,int256,uint256,uint64,uint32,uint32,uint32,uint32),int256,uint256)
-          handler: handleTradeSuccess
-      file: ./src/broker.ts
 templates:
   - kind: ethereum/contract
     name: LiquidityPool

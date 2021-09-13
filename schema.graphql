@@ -1,29 +1,12 @@
 type User @entity {
     # user address
     id: ID!
-    collateralAmount: BigDecimal!
-    collateralAmountUSD: BigDecimal!
-    # placed one trade
+    liquidity: BigDecimal!
+    liquidityAge: BigInt!
+    liquidityLastAddTime: BigInt!
     isTrade: Boolean!
-    # placed an order with the value of more than $2000 and matched
-    matchedOrderTarget1: Boolean!
-    # placed an order with the value of more than $5000 and matched
-    matchedOrderTarget2: Boolean!
-    # placed an order with the value of more than $10000 and matched
-    matchedOrderTarget3: Boolean!
-
-    # provide liquidity to any pool for more than $500 for more than 7 days
-    liquidityTarget1Triggered: Boolean!
-    ageTarget1: BigInt!
-    updatedAtTarget1: BigInt!
-    # provide $2000 worth of liquidity to any liquidity pool in a single transaction for more than 14 days
-    liquidityTarget2Triggered: Boolean!
-    ageTarget2: BigInt!
-    updatedAtTarget2: BigInt!
-    # provide $5000 worth of liquidity to any liquidity pool in a single transaction for more than 14 days
-    liquidityTarget3Triggered: Boolean!
-    ageTarget3: BigInt!
-    updatedAtTarget3: BigInt!
+    # trade volume
+    tradeVolume: BigDecimal!
 }
 
 type LiquidityPool @entity {
@@ -55,24 +38,6 @@ type Trade @entity {
     volume: BigDecimal!
     volumeUSD: BigDecimal!
     fee: BigDecimal!
-    transactionHash: String!
-    blockNumber: BigInt!
-    timestamp: BigInt!
-    logIndex: BigInt!
-}
-
-type MatchOrder @entity {
-    # transaction hash + "-" + index
-    id: ID!
-    perpetual: Perpetual!
-    orderHash: String!
-    trader: User!
-    amount: BigDecimal!
-    price: BigDecimal!
-    volume: BigDecimal!
-    volumeUSD: BigDecimal!
-    type: Int!
-    gas: BigDecimal!
     transactionHash: String!
     blockNumber: BigInt!
     timestamp: BigInt!

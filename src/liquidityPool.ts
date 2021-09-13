@@ -32,38 +32,18 @@ export function handleAddLiquidity(event: AddLiquidityEvent): void {
     let liquidityPool = LiquidityPool.load(event.address.toHexString())
     let user = fetchUser(event.params.trader)
     let cash = convertToDecimal(event.params.addedCash, BI_18)
-    user.collateralAmount += cash
     // to USD
     let tokenPrice = getTokenPrice(liquidityPool.collateralAddress)
     let cashUSD = cash.times(tokenPrice)
-    user.collateralAmountUSD += cashUSD
+    user.liquidity += cashUSD
 
 
     // provide liquidity to any pool for more than $500 for more than 7 days
-    if (user.collateralAmountUSD >= BigDecimal.fromString('500')) {
-        user.liquidityTarget1Triggered = true
-        if (user.updatedAtTarget1 > ZERO_BI) {
-            user.ageTarget1 = event.block.timestamp - user.updatedAtTarget1
+    if (user.liquidity >= BigDecimal.fromString('5000')) {
+        if (user.liquidityLastAddTime > ZERO_BI) {
+            user.liquidityAge += (event.block.timestamp - user.liquidityLastAddTime)
+            user.liquidityLastAddTime = event.block.timestamp
         }
-        user.updatedAtTarget1 = event.block.timestamp
-    }
-
-    // provide $2000 worth of liquidity to any liquidity pool in a single transaction for more than 14 days
-    if (cashUSD >= BigDecimal.fromString('2000')) {
-        user.liquidityTarget2Triggered = true
-        if (user.updatedAtTarget2 > ZERO_BI) {
-            user.ageTarget2 = event.block.timestamp - user.updatedAtTarget2
-        }
-        user.updatedAtTarget2 = event.block.timestamp
-    }
-
-    // provide $5000 worth of liquidity to any liquidity pool in a single transaction for more than 14 days
-    if (cashUSD >= BigDecimal.fromString('5000')) {
-        user.liquidityTarget3Triggered = true
-        if (user.updatedAtTarget3 > ZERO_BI) {
-            user.ageTarget3 = event.block.timestamp - user.updatedAtTarget3
-        }
-        user.updatedAtTarget3 = event.block.timestamp
     }
 
     user.save()
@@ -73,29 +53,14 @@ export function handleRemoveLiquidity(event: RemoveLiquidityEvent): void {
     let liquidityPool = LiquidityPool.load(event.address.toHexString())
     let user = fetchUser(event.params.trader)
     let cash = convertToDecimal(event.params.returnedCash, BI_18)
-    user.collateralAmount = user.collateralAmount.minus(cash)
     let tokenPrice = getTokenPrice(liquidityPool.collateralAddress)
-    let cashUSD = user.collateralAmount.times(tokenPrice)
-    user.collateralAmountUSD -= cashUSD
+    let cashUSD = cash.times(tokenPrice)
+    user.liquidity -= cashUSD
 
-    if (user.updatedAtTarget3 > ZERO_BI) {
-        if (user.collateralAmountUSD < BigDecimal.fromString('5000')) {
-            user.ageTarget3 = event.block.timestamp - user.updatedAtTarget3
-            user.updatedAtTarget3 = ZERO_BI
-        }
-    }
-
-    if (user.updatedAtTarget2 > ZERO_BI) {
-        if (user.collateralAmountUSD < BigDecimal.fromString('2000')) {
-            user.ageTarget2 = event.block.timestamp - user.updatedAtTarget2
-            user.updatedAtTarget2 = ZERO_BI
-        }
-    }
-
-    if (user.updatedAtTarget1 > ZERO_BI) {
-        if (user.collateralAmountUSD < BigDecimal.fromString('500')) {
-            user.ageTarget1 = event.block.timestamp - user.updatedAtTarget1
-            user.updatedAtTarget1 = ZERO_BI
+    if (user.liquidity < BigDecimal.fromString('5000')) {
+        if (user.liquidityLastAddTime > ZERO_BI) {
+            user.liquidityAge += (event.block.timestamp - user.liquidityLastAddTime)
+            user.liquidityLastAddTime = ZERO_BI
         }
     }
 
@@ -138,9 +103,8 @@ export function handleTrade(event: TradeEvent): void {
     trade.volume = volume
     trade.volumeUSD = volumeUSD
     trade.save()
-    if (!trader.isTrade) {
-        trader.isTrade = true
-        trader.save()
 
-    }
+    trader.tradeVolume += volumeUSD
+    trader.isTrade = true
+    trader.save()
 }

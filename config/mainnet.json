@@ -1,9 +1,0 @@
-{
-    "network": "mainnet",
-    "factory_address": "0x0A1334aCea4E38a746daC7DCf7C3E61F0AB3D834",
-    "broker_address": "0xC9010d5B798286651dC24A2c49BbAd673Dd4978b",
-    "eth_oracle": "0xbb05666820137b3b1344fe6802830515c015dd4f",
-    "eth_token": "0xfa53fd78b5176b4d77219326841cc16c02c7f183f9",
-    "usdc_token": "0x09b98f8b2395d076514037ff7d39a091a536206c",
-    "start_block": 786
-}

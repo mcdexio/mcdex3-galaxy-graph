@@ -1,10 +1,9 @@
 {
     "network": "arbitrum-one",
-    "factory_address": "0x784819cbA91Ed87C296565274fc150EaA11EBC04",
-    "broker_address": "0x3D782bBa1c2568E33ba5a20a9Ddf3879BBf136c0",
-    "eth_oracle": "0xbb05666820137b3b1344fe6802830515c015dd4f",
+    "factory_address": "0xA017B813652b93a0aF2887913EFCBB4ab250CE65",
+    "broker_address": "0xf985cA33B8b787599DE77E4Ccf2d0Ecbf27d87d9",
+    "eth_oracle": "0x1cf22b7f84f86c36cb191bb24993eda2b191399e",
     "eth_token": "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
     "usdc_token": "0xff970a61a04b1ca14834a43f5de4533ebddb5cc8",
-    "start_block": 80722
-
+    "start_block": 219883
 }

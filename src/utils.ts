@@ -25,21 +25,11 @@ export function fetchUser(address: Address): User {
   let user = User.load(address.toHexString())
   if (user === null) {
     user = new User(address.toHexString())
-    user.collateralAmount = ZERO_BD
-    user.collateralAmountUSD = ZERO_BD
     user.isTrade = false
-    user.matchedOrderTarget1 = false
-    user.matchedOrderTarget2 = false
-    user.matchedOrderTarget3 = false
-    user.liquidityTarget1Triggered = false
-    user.ageTarget1 = ZERO_BI
-    user.updatedAtTarget1 = ZERO_BI
-    user.liquidityTarget2Triggered = false
-    user.ageTarget2 = ZERO_BI
-    user.updatedAtTarget2 = ZERO_BI
-    user.liquidityTarget3Triggered = false
-    user.ageTarget3 = ZERO_BI
-    user.updatedAtTarget3 = ZERO_BI
+    user.liquidity = ZERO_BD
+    user.tradeVolume = ZERO_BD
+    user.liquidityAge = ZERO_BI
+    user.liquidityLastAddTime = ZERO_BI
     user.save()
   }
   return user as User
